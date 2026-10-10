@@ -367,3 +367,57 @@ textarea:focus-visible { outline: 2px solid #9eb77e; outline-offset: 3px; border
         font-size: 16px;
     }
 }
+/* Glosson AI — Main Translate Button */
+
+#translateButton {
+    width: 100%;
+    min-height: 54px;
+    margin-top: 18px;
+    padding: 14px 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    background: #173f35;
+    color: #fffefa;
+    border: 1px solid #173f35;
+    border-radius: 13px;
+
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: background 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+#translateButton:hover {
+    background: #102f28;
+    box-shadow: 0 5px 14px rgba(23, 63, 53, 0.15);
+}
+
+#translateButton:active {
+    transform: scale(0.99);
+}
+
+#translateButton:focus-visible {
+    outline: 3px solid #9eb77e;
+    outline-offset: 3px;
+}
+
+#translateButton:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+@media (max-width: 380px) {
+    #translateButton {
+        min-height: 50px;
+        font-size: 15px;
+    }
+}
