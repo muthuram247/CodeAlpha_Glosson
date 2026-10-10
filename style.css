@@ -288,3 +288,82 @@ textarea:focus-visible { outline: 2px solid #9eb77e; outline-offset: 3px; border
         font-size: 0.94rem;
     }
 }
+/* Glosson AI — Translation Workspace Polish */
+
+.translator-card {
+    overflow: hidden;
+    border-radius: 22px;
+    border: 1px solid #dfe4dc;
+    box-shadow: 0 10px 30px rgba(23, 63, 53, 0.045);
+}
+
+/* Language selector labels */
+.language-selector label,
+.language-group label {
+    color: #46564c;
+    font-weight: 700;
+}
+
+/* Dropdowns */
+.translator-card select {
+    min-height: 48px;
+    border-radius: 12px;
+    border: 1px solid #d9ded5;
+    background-color: #fffefa;
+    color: #203c32;
+    font-size: 15px;
+}
+
+/* Clear keyboard and touch focus */
+.translator-card select:focus,
+.translator-card textarea:focus {
+    outline: none;
+    border-color: #7b967e;
+    box-shadow: 0 0 0 3px rgba(123, 150, 126, 0.14);
+}
+
+/* Text entry */
+.translator-card textarea {
+    line-height: 1.7;
+    color: #203c32;
+    caret-color: #557966;
+}
+
+.translator-card textarea::placeholder {
+    color: #929990;
+    opacity: 1;
+}
+
+/* Swap languages */
+.swap-button {
+    transition: transform 0.18s ease,
+                background 0.18s ease;
+}
+
+.swap-button:active {
+    transform: scale(0.94);
+}
+
+/* Translation result */
+.translation-output {
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+    color: #203c32;
+}
+
+/* Keyboard navigation */
+.translator-card button:focus-visible {
+    outline: 3px solid #9eb77e;
+    outline-offset: 3px;
+}
+
+/* Small mobile screens */
+@media (max-width: 380px) {
+    .translator-card {
+        border-radius: 17px;
+    }
+
+    .translator-card textarea {
+        font-size: 16px;
+    }
+}
