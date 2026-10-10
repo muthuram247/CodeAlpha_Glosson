@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#173f35">
+  <meta name="description" content="Glosson AI helps you translate, listen to, and practice languages.">
+  <title>Glosson AI — Language, made clear</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="Glosson AI home">
+      <span class="brand-mark">G</span>
+      <span>glosson<span class="brand-ai">.ai</span></span>
+    </a>
+    <div class="header-note"><span class="status-dot"></span> Your words, understood</div>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero">
+      <p class="eyebrow">A LITTLE CLOSER TO EVERY LANGUAGE</p>
+      <h1>Say it in<br><em>another language.</em></h1>
+      <p class="hero-copy">A simple space to translate, listen, and find the right words — wherever life takes you.</p>
+    </section>
+
+    <section id="authSection" class="auth-card" aria-labelledby="authHeading">
+      <div class="auth-intro">
+        <p class="eyebrow">YOUR PERSONAL LANGUAGE DESK</p>
+        <h2 id="authHeading">Welcome to Glosson</h2>
+        <p>Sign in to keep your translation workspace ready.</p>
+      </div>
+
+      <div class="auth-tabs" role="tablist" aria-label="Account options">
+        <button class="auth-tab active" id="loginTab" type="button" role="tab" aria-selected="true">Sign in</button>
+        <button class="auth-tab" id="signupTab" type="button" role="tab" aria-selected="false">Create account</button>
+      </div>
+
+      <form id="authForm" class="auth-form">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="At least 6 characters" autocomplete="current-password" minlength="6" required>
+
+        <button id="authSubmit" class="button button-primary full-width" type="submit">Sign in</button>
+      </form>
+
+      <div class="separator"><span>or continue with</span></div>
+      <button id="googleButton" class="button button-google full-width" type="button">
+        <span class="google-g" aria-hidden="true">G</span> Continue with Google
+      </button>
+      <p id="authMessage" class="message" role="status" aria-live="polite"></p>
+      <p class="privacy-note">Your password is handled by Supabase Authentication. Never share it with anyone.</p>
+    </section>
+
+    <section id="translatorSection" class="translator-section hidden" aria-labelledby="translatorHeading">
+      <div class="workspace-top">
+        <div>
+          <p class="eyebrow">YOUR WORKSPACE</p>
+          <h2 id="translatorHeading">What would you like to say?</h2>
+          <p id="signedInLabel" class="signed-in-label"></p>
+        </div>
+        <button id="logoutButton" class="button button-quiet" type="button">Sign out ↗</button>
+      </div>
+
+      <div class="translator-card">
+        <div class="language-bar">
+          <div class="language-field">
+            <label for="sourceLanguage">Translate from</label>
+            <select id="sourceLanguage">
+              <option value="auto">Detect language</option>
+              <option value="en">English</option><option value="ta">Tamil</option>
+              <option value="hi">Hindi</option><option value="te">Telugu</option>
+              <option value="ml">Malayalam</option><option value="kn">Kannada</option>
+              <option value="fr">French</option><option value="es">Spanish</option>
+              <option value="de">German</option><option value="it">Italian</option>
+              <option value="ja">Japanese</option><option value="ko">Korean</option>
+              <option value="zh-CN">Chinese (Simplified)</option><option value="ar">Arabic</option>
+              <option value="pt">Portuguese</option><option value="ru">Russian</option>
+            </select>
+          </div>
+          <button id="swapLanguages" class="swap-button" type="button" aria-label="Swap languages" title="Swap languages">⇄</button>
+          <div class="language-field">
+            <label for="targetLanguage">Translate to</label>
+            <select id="targetLanguage">
+              <option value="ta">Tamil</option><option value="en">English</option>
+              <option value="hi">Hindi</option><option value="te">Telugu</option>
+              <option value="ml">Malayalam</option><option value="kn">Kannada</option>
+              <option value="fr">French</option><option value="es">Spanish</option>
+              <option value="de">German</option><option value="it">Italian</option>
+              <option value="ja">Japanese</option><option value="ko">Korean</option>
+              <option value="zh-CN">Chinese (Simplified)</option><option value="ar">Arabic</option>
+              <option value="pt">Portuguese</option><option value="ru">Russian</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="translation-grid">
+          <div class="text-panel">
+            <div class="panel-heading"><span>Your text</span><span id="charCount">0 / 3000</span></div>
+            <textarea id="sourceText" maxlength="3000" placeholder="Type a word, a sentence, or a thought..." spellcheck="true"></textarea>
+            <div class="panel-actions">
+              <button id="voiceButton" class="text-action" type="button">🎙 Speak</button>
+              <button id="clearButton" class="text-action" type="button">Clear text</button>
+            </div>
+          </div>
+          <div class="text-panel result-panel">
+            <div class="panel-heading"><span>Translation</span><span id="resultLanguage">Tamil</span></div>
+            <div id="translatedText" class="translated-text" aria-live="polite">Your translation will appear here.</div>
+            <div class="panel-actions">
+              <button id="listenButton" class="text-action" type="button" disabled>▶ Listen</button>
+              <button id="copyButton" class="text-action" type="button" disabled>▢ Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="translate-footer">
+          <p id="translateMessage" class="message" role="status" aria-live="polite"></p>
+          <button id="translateButton" class="button button-primary translate-button" type="button">Translate text <span>→</span></button>
+        </div>
+      </div>
+
+      <section class="history-section">
+        <div class="history-heading">
+          <div><p class="eyebrow">RECENTLY USED</p><h3>Your history</h3></div>
+          <button id="clearHistoryButton" class="text-action" type="button">Clear history</button>
+        </div>
+        <div id="historyList" class="history-list">
+          <p class="empty-history">Your recent translations will show up here.</p>
+        </div>
+      </section>
+      <p class="data-note">Translation history is saved in this browser on this device. It is not synced to your other devices.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Built for clarity. Not for collecting your data.</span>
+    <span>© 2026 Glosson AI</span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+  <script>
+    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
