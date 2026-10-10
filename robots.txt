@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://muthuram247.github.io/glosson-ai/sitemap.xml
