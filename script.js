@@ -1,4 +1,4 @@
-/* Glosson AI — browser-side app logic. */
+
 (() => {
   "use strict";
 
