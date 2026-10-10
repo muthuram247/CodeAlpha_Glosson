@@ -1,9 +1,7 @@
 (() => {
   "use strict";
-
   const SUPABASE_URL = "https://rmpiltxmqywwsenyxcdc.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Q5EyDnwwgjXUeK55zAUTag_FQrr3vHS";
-
   const $ = (id) => document.getElementById(id);
   const authSection = $("authSection");
   const translatorSection = $("translatorSection");
@@ -17,34 +15,27 @@
   const translateButton = $("translateButton");
   const listenButton = $("listenButton");
   const copyButton = $("copyButton");
-
   let authMode = "login";
   let currentUser = null;
   let currentTranslation = "";
   let recognition = null;
-
   if (!window.supabase || !window.supabase.createClient) {
     setMessage(authMessage, "Could not load the sign-in service. Check your internet connection and reload.", true);
     return;
   }
-
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-
   function setMessage(element, message, isError = false) {
     element.textContent = message || "";
     element.classList.toggle("error", Boolean(isError));
   }
-
   function setBusy(button, busy, busyText, normalText) {
     button.disabled = busy;
     button.textContent = busy ? busyText : normalText;
   }
-
   function showAuth() {
     authSection.classList.remove("hidden");
     translatorSection.classList.add("hidden");
   }
-
   function showTranslator(user) {
     currentUser = user;
     authSection.classList.add("hidden");
@@ -52,11 +43,9 @@
     $("signedInLabel").textContent = user.email ? `Signed in as ${user.email}` : "Signed in with Google";
     renderHistory();
   }
-
   function historyKey() {
     return currentUser ? `glosson-history-${currentUser.id}` : "glosson-history";
   }
-
   function readHistory() {
     try {
       const value = JSON.parse(localStorage.getItem(historyKey()) || "[]");
@@ -65,7 +54,6 @@
       return [];
     }
   }
-
   function saveHistory(items) {
     try {
       localStorage.setItem(historyKey(), JSON.stringify(items.slice(0, 12)));
@@ -73,12 +61,10 @@
       setMessage(translateMessage, "Translation worked, but this browser could not save the history.", true);
     }
   }
-
   function renderHistory() {
     const list = $("historyList");
     const items = readHistory();
     list.replaceChildren();
-
     if (!items.length) {
       const empty = document.createElement("p");
       empty.className = "empty-history";
@@ -86,11 +72,9 @@
       list.appendChild(empty);
       return;
     }
-
     items.forEach((item) => {
       const card = document.createElement("article");
       card.className = "history-item";
-
       const content = document.createElement("div");
       const original = document.createElement("p");
       original.className = "history-original";
@@ -102,7 +86,6 @@
       meta.className = "history-meta";
       meta.textContent = `${item.fromLabel} → ${item.toLabel} · ${item.date}`;
       content.append(original, result, meta);
-
       const useButton = document.createElement("button");
       useButton.type = "button";
       useButton.className = "history-use";
@@ -120,16 +103,13 @@
         copyButton.disabled = false;
         window.scrollTo({ top: translatorSection.offsetTop, behavior: "smooth" });
       });
-
       card.append(content, useButton);
       list.appendChild(card);
     });
   }
-
   function selectedLanguageLabel(select) {
     return select.options[select.selectedIndex]?.text || select.value;
   }
-
   function updateAuthMode(mode) {
     authMode = mode;
     const isLogin = mode === "login";
@@ -142,10 +122,8 @@
     $("password").autocomplete = isLogin ? "current-password" : "new-password";
     setMessage(authMessage, "");
   }
-
   $("loginTab").addEventListener("click", () => updateAuthMode("login"));
   $("signupTab").addEventListener("click", () => updateAuthMode("signup"));
-
   authForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const email = $("email").value.trim();
@@ -154,7 +132,6 @@
     const normalText = authMode === "login" ? "Sign in" : "Create account";
     setBusy(button, true, authMode === "login" ? "Signing in…" : "Creating account…", normalText);
     setMessage(authMessage, "");
-
     try {
       if (authMode === "signup") {
         const { data, error } = await supabase.auth.signUp({
@@ -179,7 +156,6 @@
       setBusy(button, false, "", normalText);
     }
   });
-
   function friendlyAuthError(message) {
     const text = String(message || "");
     if (/Invalid login credentials/i.test(text)) return "Email or password is incorrect. Try again, or create an account.";
@@ -188,7 +164,6 @@
     if (/Password should be at least/i.test(text)) return "Choose a password with at least 6 characters.";
     return text || "Something went wrong. Please try again.";
   }
-
   $("googleButton").addEventListener("click", async () => {
     const button = $("googleButton");
     button.disabled = true;
@@ -205,7 +180,6 @@
       button.disabled = false;
     }
   });
-
   $("logoutButton").addEventListener("click", async () => {
     const button = $("logoutButton");
     button.disabled = true;
@@ -222,7 +196,6 @@
       button.disabled = false;
     }
   });
-
   supabase.auth.onAuthStateChange((_event, session) => {
     if (session?.user) {
       showTranslator(session.user);
@@ -231,7 +204,6 @@
       showAuth();
     }
   });
-
   supabase.auth.getSession().then(({ data, error }) => {
     if (error) {
       setMessage(authMessage, "Could not check your session. Please reload.", true);
@@ -240,11 +212,9 @@
     if (data.session?.user) showTranslator(data.session.user);
     else showAuth();
   });
-
   sourceText.addEventListener("input", () => {
     $("charCount").textContent = `${sourceText.value.length} / 3000`;
   });
-
   $("swapLanguages").addEventListener("click", () => {
     if (sourceLanguage.value === "auto") {
       setMessage(translateMessage, "Choose a source language before swapping.", true);
@@ -272,7 +242,6 @@
     setMessage(translateMessage, "");
     sourceText.focus();
   });
-
   translateButton.addEventListener("click", async () => {
     const text = sourceText.value.trim();
     if (!text) {
@@ -284,7 +253,6 @@
       setMessage(translateMessage, "Choose two different languages.", true);
       return;
     }
-
     setBusy(translateButton, true, "Translating…", "Translate text →");
     setMessage(translateMessage, "");
     try {
@@ -321,7 +289,6 @@
       translateButton.textContent = "Translate text →";
     }
   });
-
   copyButton.addEventListener("click", async () => {
     if (!currentTranslation) return;
     try {
@@ -337,7 +304,6 @@
       setMessage(translateMessage, copied ? "Translation copied." : "Copy was blocked by this browser.", !copied);
     }
   });
-
   listenButton.addEventListener("click", () => {
     if (!currentTranslation) return;
     if (!("speechSynthesis" in window)) {
@@ -349,7 +315,6 @@
     utterance.lang = targetLanguage.value === "auto" ? "en" : targetLanguage.value;
     window.speechSynthesis.speak(utterance);
   });
-
   $("voiceButton").addEventListener("click", () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -384,13 +349,11 @@
     };
     recognition.start();
   });
-
   $("clearHistoryButton").addEventListener("click", () => {
     saveHistory([]);
     renderHistory();
     setMessage(translateMessage, "History cleared from this browser.");
   });
-
   $("resultLanguage").textContent = selectedLanguageLabel(targetLanguage);
   targetLanguage.addEventListener("change", () => {
     $("resultLanguage").textContent = selectedLanguageLabel(targetLanguage);
