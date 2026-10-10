@@ -204,3 +204,26 @@ textarea:focus-visible { outline: 2px solid #9eb77e; outline-offset: 3px; border
   .workspace-top .button { min-height: 39px; padding: 8px 11px; font-size: .78rem; }
   .site-footer { flex-direction: column; gap: 4px; }
 }
+#guestButton {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 16px 20px;
+  border: 1px solid #d9ded5;
+  border-radius: 14px;
+  background: #f0f1e9;
+  color: #193f35;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#guestButton:hover {
+  background: #e5e9dc;
+}
+
+#guestButton:active {
+  transform: scale(0.98);
+}
