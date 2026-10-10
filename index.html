@@ -52,9 +52,23 @@
       <button id="googleButton" class="button button-google full-width" type="button">
         <span class="google-g" aria-hidden="true">G</span> Continue with Google
       </button>
-      <button id="guestButton" type="button">
-  Use without an account →
+      
+<button id="guestButton" type="button">
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+    >
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 21a8 8 0 0 1 16 0"></path>
+    </svg>
+    <span>Use without an account</span>
 </button>
+
       <p id="authMessage" class="message" role="status" aria-live="polite"></p>
       <p class="privacy-note">Your password is handled by Supabase Authentication. Never share it with anyone.</p>
     </section>
