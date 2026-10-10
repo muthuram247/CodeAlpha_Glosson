@@ -9,9 +9,6 @@
   const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_Q5EyDnwwgjXUeK55zAUTag_FQrr3vHS";
 
-  const LOGIN_TRACKER_URL =
-    "https://script.google.com/macros/s/AKfycbzP6IFHzTQf3h8l1X3aG_-l6SZ9JAPGj4MSkuzO33aIzVo50DPcIenRg-tAU3VTUsokWA/exec";
-
   const $ = (id) => document.getElementById(id);
 
   const authSection = $("authSection");
@@ -29,6 +26,7 @@
 
   let authMode = "login";
   let currentUser = null;
+  let isGuest = false;
   let currentTranslation = "";
   let recognition = null;
 
@@ -57,12 +55,16 @@
   }
 
   function showAuth() {
+    isGuest = false;
+    currentUser = null;
     authSection.classList.remove("hidden");
     translatorSection.classList.add("hidden");
   }
 
   function showTranslator(user) {
     currentUser = user;
+    isGuest = false;
+
     authSection.classList.add("hidden");
     translatorSection.classList.remove("hidden");
 
@@ -70,33 +72,35 @@
       ? `Signed in as ${user.email}`
       : "Signed in with Google";
 
+    $("logoutButton").textContent = "Sign out";
     renderHistory();
   }
 
-  // Send successful sign-in events to the Google Sheets tracker.
-  // Apps Script must verify the token with Supabase before logging.
-  function recordSuccessfulLogin(session) {
-    if (!session || !session.access_token) return;
+  function showGuestTranslator() {
+    currentUser = null;
+    isGuest = true;
 
-    try {
-      fetch(LOGIN_TRACKER_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify({
-          access_token: session.access_token
-        })
-      }).catch(() => {
-        // Tracking errors must not interrupt login.
-      });
-    } catch (error) {
-      // Keep the website usable if tracking is unavailable.
-    }
+    authSection.classList.add("hidden");
+    translatorSection.classList.remove("hidden");
+
+    $("signedInLabel").textContent =
+      "Using Glosson without an account";
+
+    $("logoutButton").textContent = "Exit guest mode";
+
+    setMessage(
+      translateMessage,
+      "Welcome! Translate without creating an account."
+    );
+
+    renderHistory();
   }
 
   function historyKey() {
+    if (isGuest) {
+      return "glosson-guest-history";
+    }
+
     return currentUser
       ? `glosson-history-${currentUser.id}`
       : "glosson-history";
@@ -243,7 +247,16 @@
     updateAuthMode("signup");
   });
 
-  // Email sign-up and sign-in
+  // Guest access — no account or email verification needed.
+  const guestButton = $("guestButton");
+
+  if (guestButton) {
+    guestButton.addEventListener("click", () => {
+      showGuestTranslator();
+    });
+  }
+
+  // Email sign-up and sign-in.
   authForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -331,7 +344,7 @@
     return text || "Something went wrong. Please try again.";
   }
 
-  // Google OAuth
+  // Google OAuth.
   $("googleButton").addEventListener("click", async () => {
     const button = $("googleButton");
 
@@ -359,20 +372,25 @@
     }
   });
 
-  // Sign out
+  // Sign out or exit guest mode.
   $("logoutButton").addEventListener("click", async () => {
     const button = $("logoutButton");
     button.disabled = true;
 
     try {
+      if (isGuest) {
+        showAuth();
+        setMessage(authMessage, "You have exited guest mode.");
+        return;
+      }
+
       const { error } = await supabase.auth.signOut();
 
       if (error) throw error;
 
-      currentUser = null;
       currentTranslation = "";
-
       showAuth();
+
       setMessage(authMessage, "You have signed out.");
     } catch (error) {
       setMessage(
@@ -385,22 +403,15 @@
     }
   });
 
-  // Track new successful sign-in events.
-  // TOKEN_REFRESHED events are deliberately not counted as logins.
+  // Restore Supabase sessions. No login tracking is performed.
   supabase.auth.onAuthStateChange((event, session) => {
     if (session?.user) {
       showTranslator(session.user);
-
-      if (event === "SIGNED_IN") {
-        recordSuccessfulLogin(session);
-      }
-    } else {
-      currentUser = null;
+    } else if (!isGuest) {
       showAuth();
     }
   });
 
-  // Restore an existing session without logging a new login.
   supabase.auth.getSession().then(({ data, error }) => {
     if (error) {
       setMessage(
@@ -413,7 +424,7 @@
 
     if (data.session?.user) {
       showTranslator(data.session.user);
-    } else {
+    } else if (!isGuest) {
       showAuth();
     }
   });
@@ -423,7 +434,7 @@
       `${sourceText.value.length} / 3000`;
   });
 
-  // Swap source and target languages
+  // Swap source and target languages.
   $("swapLanguages").addEventListener("click", () => {
     if (sourceLanguage.value === "auto") {
       setMessage(
@@ -460,7 +471,7 @@
     setMessage(translateMessage, "");
   });
 
-  // Clear input
+  // Clear input.
   $("clearButton").addEventListener("click", () => {
     sourceText.value = "";
     $("charCount").textContent = "0 / 3000";
@@ -468,7 +479,7 @@
     sourceText.focus();
   });
 
-  // Translate text
+  // Translate text.
   translateButton.addEventListener("click", async () => {
     const text = sourceText.value.trim();
 
@@ -571,7 +582,7 @@
     }
   });
 
-  // Copy translation
+  // Copy translation.
   copyButton.addEventListener("click", async () => {
     if (!currentTranslation) return;
 
@@ -598,7 +609,7 @@
     }
   });
 
-  // Text-to-speech
+  // Text-to-speech.
   listenButton.addEventListener("click", () => {
     if (!currentTranslation) return;
 
@@ -623,7 +634,7 @@
     window.speechSynthesis.speak(utterance);
   });
 
-  // Voice input
+  // Voice input.
   $("voiceButton").addEventListener("click", () => {
     const SpeechRecognition =
       window.SpeechRecognition ||
@@ -687,7 +698,7 @@
     recognition.start();
   });
 
-  // Clear local translation history
+  // Clear only the active user's or guest's local history.
   $("clearHistoryButton").addEventListener("click", () => {
     saveHistory([]);
     renderHistory();
