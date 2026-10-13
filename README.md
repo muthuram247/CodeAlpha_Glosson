@@ -1,13 +1,13 @@
-# Glosson AI — Language, made clear
+# Glosson — Language, made clear
 
-**Glosson AI is a lightweight language-translation website that helps people understand and express everyday thoughts in another language.** Users can type or speak text, choose a language pair, view the translation, listen to it, copy it, and return to recent translations—all in one simple workspace.
+**Glosson is a lightweight language-translation website that helps people understand and express everyday thoughts in another language.** Users can type or speak text, choose a language pair, view the translation, listen to it, copy it, and return to recent translations—all in one simple workspace.
 
 **Live website:** https://muthuram247.github.io/glosson-ai/  
 **Source code:** https://github.com/muthuram247/glosson-ai
 
 ## Why I built it
 
-I wanted to bring a few useful language tools together in one calm, easy-to-use website. Instead of only translating text, Glosson AI also provides voice input, spoken output, and a history of recent translations. The interface is designed to be straightforward on both phones and desktop screens.
+I wanted to bring a few useful language tools together in one calm, easy-to-use website. Instead of only translating text, Glosson also provides voice input, spoken output, and a history of recent translations. The interface is designed to be straightforward on both phones and desktop screens.
 
 ## Features
 
@@ -22,7 +22,7 @@ I wanted to bring a few useful language tools together in one calm, easy-to-use 
 
 ## How it works
 
-1. Open Glosson AI and sign in, create an account, or choose guest mode.
+1. Open Glosson and sign in, create an account, or choose guest mode.
 2. Select the source and target languages.
 3. Type your text or use voice input.
 4. Select **Translate text** to request a translation.
@@ -85,7 +85,7 @@ Keep the Google Client Secret and any Supabase secret or `service_role` key out 
 
 ## Project goal
 
-Glosson AI brings translation, voice, and quick access to recent results into a single, approachable workspace. The focus is on making everyday multilingual communication feel simpler and more accessible.
+Glosson brings translation, voice, and quick access to recent results into a single, approachable workspace. The focus is on making everyday multilingual communication feel simpler and more accessible.
 
 ---
 
