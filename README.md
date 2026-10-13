@@ -89,4 +89,4 @@ Glosson brings translation, voice, and quick access to recent results into a sin
 
 ---
 
-*Built for clarity. Not for collecting your data.*
+*Built for clarity. Built for a purpose.*
