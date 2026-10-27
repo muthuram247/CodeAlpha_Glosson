@@ -3,7 +3,7 @@
 **Glosson is a lightweight language-translation website that helps people understand and express everyday thoughts in another language.** Users can type or speak text, choose a language pair, view the translation, listen to it, copy it, and return to recent translations—all in one simple workspace.
 
 **Live website:** https://muthuram247.github.io/CodeAlpha_Glosson
-**Source code:** https://github.com/muthuram247/glosson-ai
+**Source code:** https://github.com/muthuram247/CodeAlpha_Glosson
 
 ## Why I built it
 
